@@ -1,0 +1,13 @@
+<where>
+    <!-- 改为使用filmName -->
+    <if test="filmName != null and filmName != ''">
+        AND f.name LIKE CONCAT('%', #{filmName}, '%')
+    </if>
+    <!-- 删除:<if test="comment.filmName != null and comment.filmName != ''"> -->
+    <!-- 删除:    AND f.name LIKE CONCAT('%', #{comment.filmName}, '%') -->
+    <!-- 删除:</if> -->
+    <!-- 保留其他查询条件示例 -->
+    <if test="userId != null">
+         AND c.user_id = #{userId}
+    </if>
+</where>
