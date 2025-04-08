@@ -29,6 +29,11 @@
         </where>
         ORDER BY c.id DESC
     </select>
+    <select id="selectFilmIdsByUserId" resultType="java.lang.Integer">
+        SELECT film_id
+        FROM comment
+        WHERE user_id = #{userId}
+    </select>
 
 
 </mapper>

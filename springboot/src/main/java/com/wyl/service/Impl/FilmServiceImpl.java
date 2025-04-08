@@ -59,34 +59,34 @@ public class FilmServiceImpl implements FilmService {
     }
 
     // 推荐
-    @Override
-    public List<Film> selectRecommend(Integer filmId) {
-        // 获取当前电影的类别
-        Film currentFilm = filmMapper.selectById(filmId);
-        Integer currentCategoryId = currentFilm.getCategoryId();
-
-        // 获取所有电影
-        List<Film> films = this.selectAll();
-
-        // 过滤掉当前电影
-        films = films.stream().filter(film -> !film.getId().equals(filmId)).collect(Collectors.toList());
-
-        // 计算相似度并排序
-        films.sort((f1, f2) -> {
-            double similarity1 = calculateSimilarity(currentCategoryId, f1.getCategoryId());
-            double similarity2 = calculateSimilarity(currentCategoryId, f2.getCategoryId());
-            return Double.compare(similarity2, similarity1); // 降序排列
-        });
-
-        // 取前三个
-        List<Film> filmList = films.stream().limit(3).collect(Collectors.toList());
-
-        // 设置评分和总分
-        for (Film f : filmList) {
-            this.setScore(f);
-        }
-        return filmList;
-    }
+//    @Override
+//    public List<Film> selectRecommend(Integer filmId) {
+//        // 获取当前电影的类别
+//        Film currentFilm = filmMapper.selectById(filmId);
+//        Integer currentCategoryId = currentFilm.getCategoryId();
+//
+//        // 获取所有电影
+//        List<Film> films = this.selectAll();
+//
+//        // 过滤掉当前电影
+//        films = films.stream().filter(film -> !film.getId().equals(filmId)).collect(Collectors.toList());
+//
+//        // 计算相似度并排序
+//        films.sort((f1, f2) -> {
+//            double similarity1 = calculateSimilarity(currentCategoryId, f1.getCategoryId());
+//            double similarity2 = calculateSimilarity(currentCategoryId, f2.getCategoryId());
+//            return Double.compare(similarity2, similarity1); // 降序排列
+//        });
+//
+//        // 取前三个
+//        List<Film> filmList = films.stream().limit(3).collect(Collectors.toList());
+//
+//        // 设置评分和总分
+//        for (Film f : filmList) {
+//            this.setScore(f);
+//        }
+//        return filmList;
+//    }
 
     // 计算两个电影类别之间的相似度
     private double calculateSimilarity(Integer categoryId1, Integer categoryId2) {
@@ -201,6 +201,78 @@ public class FilmServiceImpl implements FilmService {
             filmMapper.updateScore(f.getId(), f.getScore());
             System.err.println("计算评分时出错，使用平均评分作为备选: " + e.getMessage());
         }
+    }
+
+    // 协同过滤推荐
+    @Override
+    public List<Film> selectCollaborativeFilteringRecommend(Integer userId) {
+        // 获取用户历史评论的电影ID列表
+        List<Integer> userCommentedFilmIds = commentMapper.selectFilmIdsByUserId(userId);
+
+        // 如果用户没有评论过任何电影，直接返回随机推荐
+        if (userCommentedFilmIds.isEmpty()) {
+            return selectRecommend(userId);
+        }
+
+        // 获取用户历史评论的电影分类ID列表
+        List<Integer> userCommentedCategoryIds = filmMapper.selectCategoryIdsByFilmIds(userCommentedFilmIds);
+
+        // 获取所有电影
+        List<Film> films = this.selectAll();
+
+        // 过滤掉用户已经评论过的电影
+        films = films.stream().filter(film -> !userCommentedFilmIds.contains(film.getId())).collect(Collectors.toList());
+
+        // 计算相似度并排序
+        films.sort((f1, f2) -> {
+            double similarity1 = calculateCollaborativeSimilarity(userCommentedCategoryIds, f1.getCategoryId());
+            double similarity2 = calculateCollaborativeSimilarity(userCommentedCategoryIds, f2.getCategoryId());
+            return Double.compare(similarity2, similarity1); // 降序排列
+        });
+
+        // 取前三个
+        List<Film> filmList = films.stream().limit(3).collect(Collectors.toList());
+
+        // 如果推荐电影不足三个，补充随机推荐
+        if (filmList.size() < 3) {
+            List<Film> randomRecommendations = selectRecommend(userId);
+            filmList.addAll(randomRecommendations.stream().limit(3 - filmList.size()).collect(Collectors.toList()));
+        }
+
+        // 设置评分和总分
+        for (Film f : filmList) {
+            this.setScore(f);
+        }
+        return filmList;
+    }
+
+    // 计算电影与用户历史评论电影分类的相似度
+    private double calculateCollaborativeSimilarity(List<Integer> userCommentedCategoryIds, Integer filmCategoryId) {
+        // 计算电影分类与用户历史评论电影分类的相似度
+        long matchCount = userCommentedCategoryIds.stream().filter(categoryId -> categoryId.equals(filmCategoryId)).count();
+        return (double) matchCount / userCommentedCategoryIds.size();
+    }
+
+    // 随机推荐
+    @Override
+    public List<Film> selectRecommend(Integer filmId) {
+        // 获取所有电影
+        List<Film> films = this.selectAll();
+
+        // 过滤掉当前电影
+        films = films.stream().filter(film -> !film.getId().equals(filmId)).collect(Collectors.toList());
+
+        // 随机排序
+        Collections.shuffle(films);
+
+        // 取前三个
+        List<Film> filmList = films.stream().limit(3).collect(Collectors.toList());
+
+        // 设置评分和总分
+        for (Film f : filmList) {
+            this.setScore(f);
+        }
+        return filmList;
     }
 
 }

@@ -69,7 +69,7 @@ public class FilmController {
 
      @GetMapping("/selectRecommend/{id}")
     public Result selectRecommend(@PathVariable Integer id){
-        List<Film> list = filmService.selectRecommend(id);
+        List<Film> list = filmService.selectCollaborativeFilteringRecommend(id);
         return Result.success(list);
      }
     

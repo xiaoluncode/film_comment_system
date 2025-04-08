@@ -21,4 +21,6 @@ public interface CommentService {
  PageInfo<Comment> selectPage(Comment comment, Integer pageNum, Integer pageSize);
 
     Integer getCommentIdByName(String commentName);
+
+
 }

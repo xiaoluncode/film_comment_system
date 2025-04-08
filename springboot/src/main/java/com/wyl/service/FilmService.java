@@ -1,6 +1,7 @@
 package com.wyl.service;
 
 import com.github.pagehelper.PageInfo;
+import com.wyl.pojo.Comment;
 import com.wyl.pojo.Film;
 
 import java.util.List;
@@ -25,4 +26,5 @@ public interface FilmService {
  List<Film> selectRecommend(Integer filmId);
 
  List<Film> selectRanking();
+ List<Film> selectCollaborativeFilteringRecommend(Integer userId);
 }

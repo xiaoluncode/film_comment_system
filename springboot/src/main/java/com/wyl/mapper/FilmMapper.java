@@ -32,4 +32,6 @@ public interface FilmMapper extends BaseMapper<Film> {
      */
     int updateScore(Integer id, String score);
 
+
+    List<Integer> selectCategoryIdsByFilmIds(List<Integer> userCommentedFilmIds);
 }

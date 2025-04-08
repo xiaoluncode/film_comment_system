@@ -52,7 +52,7 @@ public class SentimentAnalyzer {
             double totalScore = 0.0;
             int matchCount = 0;
 
-            // 对评论文本进行分词（这里使用简单的字符匹配，实际项目中可以使用专业分词工具）
+            // 对评论文本进行分词
             for (Map.Entry<String, Double> entry : emotionDict.entrySet()) {
                 String keyword = entry.getKey();
                 if (text.contains(keyword)) {

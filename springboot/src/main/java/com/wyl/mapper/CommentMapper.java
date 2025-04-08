@@ -23,4 +23,6 @@ public interface CommentMapper extends BaseMapper<Comment> {
     @Select("SELECT comment FROM comment WHERE film_id = #{filmId}")
     List<String> selectCommentContents(@Param("filmId") Integer filmId);
 
+
+    List<Integer> selectFilmIdsByUserId(Integer userId);
 }
