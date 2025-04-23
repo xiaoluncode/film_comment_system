@@ -60,7 +60,7 @@ DROP DATABASE IF EXISTS film_comment_system;
 CREATE DATABASE film_comment_system CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE film_comment_system;
 -- 导入 SQL 建表脚本
-SOURCE /path/to/sql/schema.sql;
+SOURCE /path/to/sql/film_comment_system.sql;
 
 确认数据表已创建：
 
@@ -70,8 +70,8 @@ SHOW TABLES;
 
 克隆项目仓库：
 
-git clone https://github.com/your-repo/film-comment-system.git
-cd film-comment-system/backend
+git clone https://github.com/xiaoluncode/film_comment_system.git
+cd film-comment-system/springboot/src/main/resources/application.yml
 
 修改配置文件application.yml：
 
@@ -97,7 +97,7 @@ cd ../frontend
 安装依赖并启动：
 
 npm install
-npm run serve
+npm run dev
 
 访问前端页面：http://localhost:8081（或控制台提示的地址）。
 
