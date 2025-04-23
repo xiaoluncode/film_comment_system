@@ -71,6 +71,7 @@ SHOW TABLES;
 克隆项目仓库：
 
 git clone https://github.com/xiaoluncode/film_comment_system.git
+
 cd film-comment-system/springboot/src/main/resources/application.yml
 
 修改配置文件application.yml：
