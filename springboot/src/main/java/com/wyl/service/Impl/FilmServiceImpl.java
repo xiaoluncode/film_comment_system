@@ -236,7 +236,7 @@ public class FilmServiceImpl implements FilmService {
         // 如果推荐电影不足三个，补充随机推荐
         if (filmList.size() < 3) {
             List<Film> randomRecommendations = selectRecommend(userId);
-            filmList.addAll(randomRecommendations.stream().limit(3 - filmList.size()).collect(Collectors.toList()));
+            filmList.addAll(randomRecommendations.stream().limit(3 - filmList.size()).toList());
         }
 
         // 设置评分和总分
