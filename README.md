@@ -1,120 +1,116 @@
-软件使用说明书
-
-1. 概述
-
-电影多维评分与智能推荐系统是一款基于Spring Boot 3、Vue 3和MySQL的全栈影评平台。它利用情感词典对用户评论进行情感分析，结合基础评分、情感评分和评论数量归一化三维加权模型生成电影综合评分，并通过协同过滤算法提供个性化推荐。此说明书旨在帮助用户快速理解、安装、使用和维护本系统。
-
-本说明书包含系统概述、环境需求、安装部署、快速开始、功能介绍、系统设置、故障排查及附录等内容，确保用户能够在各个角色（普通用户、管理员）下顺畅操作。
-
-2. 环境需求
-
-2.1 硬件要求
-
-CPU：4 核及以上
-
-内存：8GB 及以上
-
-存储：SSD 50GB 及以上
-
-网络：稳定的局域网或互联网连接
-
-2.2 软件要求
-
-操作系统：Windows 10 / 11，或任意 Linux 发行版
-
-Java：JDK 21
-
-Node.js：16.x 及以上
-
-Maven：3.9.8 及以上
-
-MySQL：5.7 及以上
-
-前端依赖：npm 或 yarn
-
-2.3 第三方库和插件
-
-Spring Boot 3.x
-
-Mybatis-Plus
-
-PageHelper 分页插件
-
-Vue 3 + Element Plus
-
-Axios
-
-3. 安装部署
-
-以下步骤以 Linux 环境为例，Windows 环境在命令和路径上略有差别，请根据实际调整。
-
-3.1 数据库初始化
-
-登录 MySQL:
-
+“电影多维评分与智能推荐系统”软件使用说明书
+一.	 软件编制人员
+21240207王亚伦
+二. 引言
+本手册是“电影多维评分与智能推荐平台”的安装、部署和使用的详细指南，。该平台采用Spring Boot 3、Vue 3和MySQL技术搭建，内置情感分析、三维评分和协同过滤推荐等核心功能，能够处理大量影评数据并生成个性化的电影推荐。
+手册内容涵盖系统总体结构、运行环境要求、部署步骤、主要功能介绍、系统配置和安全措施，以及常见问题处理，帮助快速掌握平台的搭建和使用方法。
+三. 系统结构概览
+3.1 系统分层结构
+本平台采用经典的三层架构，分别是：
+（1）前端界面层：使用Vue 3和Element Plus框架，负责与用户交互。
+（2）后端逻辑层：基于Spring Boot 3开发，处理业务逻辑、情感分析、推荐计算等。
+（3）数据存储层：使用MySQL数据库进行数据存储，Mybatis-Plus框架负责数据库访问，优化查询速度。
+（详见附录A系统架构图）
+3.2 部署方式
+（1）本地单机部署：适合个人开发和测试。
+（2）服务器部署：前端项目通过Nginx发布，后端应用使用Docker容器化，数据库设置高可用，支持Redis缓存加速数据访问。
+四. 运行环境与依赖条件
+4.1 硬件和操作系统要求
+（1）推荐配置（生产环境）：8核CPU、16GB内存、500GB SSD存储。
+（2）最低配置（开发测试）：4核CPU、8GB内存、100GB SSD。
+操作系统可选择：CentOS 7/8、Ubuntu 20.04 或 Windows Server 2019。
+4.2 软件依赖
+（1）JDK 21
+（2）Maven 3.9.8及以上
+（3）Node.js 16及以上
+（4）MySQL 8.0.37
+（5）Git 2.30及以上
+4.3 其他组件
+（1）Spring Boot 3.x
+（2）Mybatis-Plus 3.x
+（3）PageHelper分页插件
+（4）Redis 6.x（可选）
+（5）Nginx 1.18及以上
+五、软件安装方法
+5.1 IntelliJ  IDEA 
+（1）下载IntelliJ IDEA安装包：
+1）	访问JetBrains官网（https://www.jetbrains.com/idea/），选择适合您操作系统的IntelliJ IDEA版本进行下载。
+2）	打开Chrome浏览器，访问IntelliJ IDEA官网链接：https://www.jetbrains.com/。
+3）	点击上方导航栏菜单“Developer Tools”（开发工具），选择“IntelliJ IDEA”，点击进入产品页面。
+4）	进入下载页面，点击页面正中的“Download”按钮进行下载。
+5）	选择需要下载的版本。IntelliJ IDEA有两个版本：Ultimate（专业付费版）和Community Edition（社区版，可免费使用）。选择社区版进行下载。
+（2）开始安装：
+1）	双击下载好的安装包进行安装。
+2）	在安装向导中，按照提示点击“Next”进行下一步。
+3）	勾选“I accept the terms in the License Agreement”（我同意许可协议中的条款），然后继续点击“Next”。
+4）	选择安装路径（可以选择默认路径或自定义路径），继续点击“Next”。
+5）	选择需要安装的组件（例如，仅安装IntelliJ IDEA或同时安装其他JetBrains工具），然后点击“Next”。
+6）	点击“Install”开始安装。
+（3）完成安装：
+安装过程中，请耐心等待。安装完成后，点击“Finish”完成安装步骤。
+（4）首次运行配置：
+1）	安装完成后，首次运行IntelliJ IDEA时，会提示您进行初始配置。
+2）	选择您希望使用的IDE界面风格（如Light或Dark），然后点击“Next”。
+3）	选择需要使用的IDE功能（如Java开发、Python开发等），然后点击“Next”。
+4）	如果需要导入之前的设置或项目，可以在此步骤中进行操作，否则直接点击“Skip Remaining and Set Defaults”跳过剩余步骤并使用默认设置。
+5）	点击“Start using IntelliJ IDEA”开始使用IntelliJ IDEA。
+（5）创建或打开项目：
+1）	在启动后的IntelliJ IDEA界面中，您可以选择创建新项目或打开已存在的项目。
+2）	如果您选择创建新项目，请根据提示选择项目类型、SDK等，并按照向导完成项目的创建。
+3）	如果您选择打开已存在的项目，请找到项目所在的目录并点击“Open”。
+（6）开始使用IntelliJ IDEA：
+1）	现在您已经成功安装了IntelliJ IDEA并可以开始使用它进行开发了。
+2）	请注意，以上步骤可能因IntelliJ IDEA的版本和操作系统的不同而略有差异。
+3）	在安装过程中，请仔细阅读每个步骤的提示信息，并根据实际情况进行操作。如果遇到问题，可以参考IntelliJ IDEA的官方文档或寻求社区的帮助。
+5.2 MySQL
+（1）下载MySQL
+1）	访问MySQL官网：打开浏览器，访问MySQL官网的下载页面：https://www.mysql.com/downloads/。
+2）	选择下载：在下载页面，找到“MySQL Community Server”并点击。根据你的操作系统（如Windows、Linux、macOS等）选择对应的下载链接。注意选择适合你的数据库版本和安装包类型（如MSI、ZIP、DMG等）。
+（2）安装MySQL（以Windows为例）
+运行安装包：找到下载的MySQL安装包，双击运行。
+1）	同意许可协议：阅读并同意MySQL的许可协议。
+2）	选择安装类型：选择“Custom”（自定义）安装类型，以便选择需要安装的组件和置安装路径。
+3）	设置安装路径：选择MySQL的安装目录和数据目录。
+4）	设置密码：为MySQL的root用户设置密码。
+5）	执行安装：点击“Execute”或“Install”开始安装。
+6）	等待安装完成：安装过程中请耐心等待，直到安装完成。
+（3）验证MySQL安装是否成功
+1）	打开服务管理器：在Windows中，可以通过运行“services.msc”命令打开服务管理器。
+2）	查看MySQL服务：在服务管理器中，查找MySQL服务（如MySQL80、MySQL57等），确保服务已启动。
+3）	通过命令行验证：打开命令提示符（CMD），输入“mysql -u root -p”命令，然后输入之前设置的密码。如果能够成功登录MySQL，说明安装成功。
+（4）配置环境变量（可选）
+1）	找到MySQL的安装路径：特别是“bin”文件的路径。
+2）	配置环境变量：右击“我的电脑”或“此电脑”，选择“属性”，然后点击“高级系统设置”。在弹出的窗口中，点击右下方的“环境变量”。在“系统变量”中找到“Path”变量，点击“编辑”。在编辑窗口中，点击“新建”，并将MySQL的“bin”文件路径添加进去。点击“确定”保存设置。
+（5）MySQL配置（高级配置，可选）
+MySQL的配置涉及多个方面，包括端口号、缓冲区大小、并发连接数、日志配置以及安全性配置等。这些配置可以根据你的具体需求进行调整。具体的配置方法和参数可以在MySQL的官方文档中找到。
+六. 安装与部署步骤
+6.1 初始化数据库
+（1）使用命令行登录MySQL：
 mysql -u root -p
-
-执行创建脚本:
-
-DROP DATABASE IF EXISTS film_comment_system;
-CREATE DATABASE film_comment_system CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+（2）创建数据库并导入SQL脚本：
+CREATE DATABASE film_comment_system CHARACTER SET utf8mb4;
 USE film_comment_system;
--- 导入 SQL 建表脚本
-SOURCE /path/to/sql/film_comment_system.sql;
-
-确认数据表已创建：
-
-SHOW TABLES;
-
-3.2 后端部署
-
-克隆项目仓库：
-
+SOURCE /opt/deploy/sql/ film_comment_system.sql;
+6.2 部署后端服务
+（1）克隆项目代码并切换到正式分支：
 git clone https://github.com/xiaoluncode/film_comment_system.git
-
-cd film-comment-system/springboot/src/main/resources/application.yml
-
-修改配置文件application.yml：
-
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/film_comment_system?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: your_password
-
-编译并运行：
-
-mvn clean package
-java -jar target/film-comment-system-0.0.1-SNAPSHOT.jar
-
-后端启动完成后，默认监听http://localhost:8080。
-
-3.3 前端部署
-
-进入前端目录：
-
-cd ../frontend
-
-安装依赖并启动：
-
+cd springboot
+git checkout release
+（2）配置数据库连接信息：编辑application.yml文件。
+（3）打包并启动后端服务：
+mvn clean package -DskipTests
+java -jar target/film-comment-system.jar
+6.3 部署前端页面
+（1）进入前端项目目录：
+cd vue
+（2）安装依赖并打包前端：
 npm install
 npm run dev
+（3）将打包后的文件上传至Nginx服务器，并设置代理访问配置。
 
-访问前端页面：http://localhost:8081（或控制台提示的地址）。
+七. 功能介绍
 
-4. 快速开始
-
-打开浏览器，访问http://localhost:8081。
-
-普通用户：点击“注册”，填写用户名、密码等信息进行注册；注册成功后登录。
-
-管理员：请联系系统管理员分配管理员账户后登录。
-
-登录后即可查看首页电影排行榜，并可通过导航栏进入电影列表、推荐、个人中心等模块。
-
-5. 功能介绍
-
-5.1 系统登录与注册
+7.1 系统登录与注册
 
 注册：填写用户名、密码、确认密码和昵称，密码将使用 MD5+盐值加密存储。
 
@@ -122,7 +118,7 @@ npm run dev
 
 找回密码：通过邮箱验证码重置密码。
 
-5.2 首页——电影排行榜
+7.2 首页——电影排行榜
 
 展示当前评分最高的前五名电影，金、银、铜前三名分别用金、银、铜色标识。
 
@@ -130,13 +126,13 @@ npm run dev
 
 点击电影卡片可进入电影详情页。
 
-5.3 电影列表与筛选
+7.3 电影列表与筛选
 
 支持按分类、年份、评分区间筛选，同时可输入关键字搜索。
 
 分页展示，默认每页10条，可自定义页码和页大小。
 
-5.4 电影详情与评论
+7.4 电影详情与评论
 
 基本信息：电影海报、名称、导演、主演、分类、语言、上映日期等。
 
@@ -144,19 +140,19 @@ npm run dev
 
 发表评论：输入评论内容，系统将即时调用情感分析服务并展示情感得分。
 
-5.5 情感分析结果查看
+7.5 情感分析结果查看
 
 在评论条目右侧显示情感分：0.0-0.4（消极）、0.5（中性）、0.6-1.0（积极）。
 
 可点击“情感详情”查看匹配到的情感词及权重。
 
-5.6 个性化推荐
+7.6 个性化推荐
 
 系统根据用户历史评分和评论分类，通过协同过滤算法生成实时推荐。
 
 推荐列表在首页侧栏显示，最多显示3部电影；点击可快速进入详情。
 
-5.7 用户个人中心
+7.7 用户个人中心
 
 个人信息：查看和修改昵称、头像、密码。
 
@@ -164,7 +160,7 @@ npm run dev
 
 我的推荐：查看推荐历史并可重新刷新推荐列表。
 
-5.8 管理端功能
+7.8 管理端功能
 
 电影管理：增删改查电影信息及分类；支持批量导入电影数据。
 
@@ -176,21 +172,21 @@ npm run dev
 
 数据监控：实时查看系统访问量、请求成功率和慢查询日志。
 
-6. 系统设置
+八. 系统设置
 
-6.1 配置文件说明
+8.1 配置文件说明
 
 application.yml：后端系统配置，包括数据库、端口、日志级别、定时任务参数。
 
 vue.config.js：前端开发和打包配置，包含代理、路径别名等。
 
-6.2 日志管理
+8.2 日志管理
 
 后端日志采用 Log4j2 记录，日志文件位于logs/目录，按日期滚动。
 
 前端使用浏览器控制台打印调试信息，生产环境会关闭详细日志。
 
-7. 故障排查
+九. 故障排查
 
 问题描述
 
@@ -222,9 +218,9 @@ vue.config.js：前端开发和打包配置，包含代理、路径别名等。
 
 新用户采用随机推荐；若老用户出现，检查comment表中是否有数据并重启推荐服务。
 
-8. 附录
+10. 附录
 
-8.1 配置文件示例
+10.1 配置文件示例
 
 # application.yml
 server:
@@ -239,7 +235,7 @@ logging:
     root: INFO
     com.example: DEBUG
 
-8.2 常见术语
+10.2 常见术语
 
 术语
 
